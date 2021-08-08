@@ -9,11 +9,22 @@ class CountdownTimer {
     start() {
         
         const startTime = this.targetDate.getTime();
+        const startDeltaTime = startTime - Date.now();
 
-        setInterval(() => {
+        if (startDeltaTime <= 0) {
+            return console.log(`Неверная дата. Введите коректную дату`);
+        }
+
+        const interval = setInterval(() => {
             const currentTime = Date.now();
             const deltaTime = startTime - currentTime;
             const time = this.getTimeComponents(deltaTime);
+
+            if (deltaTime < 0) {                
+                clearInterval(interval);
+                return console.log(`Время вышло!`);
+            }
+
             this.updateTimer(time);
         }, 1000);
     }
@@ -45,7 +56,7 @@ class CountdownTimer {
 
 const countdownTimer = new CountdownTimer({
   selector: '#timer-1',
-  targetDate: new Date('Aug 12, 2021'),
+  targetDate: new Date('2021-08-12T00:00:00'),
 });
 
 countdownTimer.start();
